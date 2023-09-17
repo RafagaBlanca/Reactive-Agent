@@ -12,14 +12,17 @@ clock = pygame.time.Clock()
 # create a surface represent our window
 screen = pygame.display.set_mode((1280, 960))
 # agent creation
-player = Agent(5,7)
+random_row = random.randint(1, n - 2)
+random_col = random.randint(1, m - 2)
+player = Agent(random_row, random_col)
+home(player)
 agent_set(player)
 
 def main():
     running = True
     # the game loop
     while running:
-        clock.tick(2)
+        clock.tick(40)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

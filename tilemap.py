@@ -1,5 +1,6 @@
 import pygame
 from agent import *
+import random
 
 
 TILE_SIZE = 64
@@ -36,7 +37,7 @@ textures = {
 
 tiles = ['G', 'B', 'Y','A', 'P','R', 'Z']
 
-maze = [
+""" maze = [
     ['Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z'],
     ['Z','B','B','B','B','B','B','B','B','B','B','B','R','B','B','B','B','B','P','Z'],
     ['Z','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','Z'],
@@ -47,8 +48,54 @@ maze = [
     ['Z','B','B','B','B','B','B','B','B','B','B','R','B','B','B','B','B','B','B','Z'],
     ['Z','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','Z'],
     ['Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z','Z'],
-]
+] """
 
+n = 10
+m = 20
+
+# Crear un laberinto vacío lleno de espacios ' '
+maze = [[' ' for _ in range(m)] for _ in range(n)]
+
+# Definir constantes
+NUM_GOALS = 10
+NUM_ROBOTS = 10
+
+random_row = random.randint(1, n - 2)
+random_column = random.randint(1, m - 2)
+# Colocar al jugador 'P' en una posición específica
+maze[random_row][random_column] = 'P'
+
+
+def home(player):
+    player.set_ship(random_column, random_row)
+
+for i in range(n):
+    maze[i][0] = 'Z'
+    maze[i][m-1] = 'Z'
+for j in range(m):
+    maze[0][j] = 'Z'
+    maze[n-1][j] = 'Z'
+# Función para colocar elementos aleatorios en el laberinto
+def place_elements(element, num_elements):
+    count = 0
+    while count < num_elements:
+        random_row = random.randint(1, n - 2)
+        random_column = random.randint(1, m - 2)
+        if maze[random_row][random_column] == ' ':
+            maze[random_row][random_column] = element
+            count += 1
+
+# Colocar 'G' (metas) en el laberinto
+place_elements('G', NUM_GOALS)
+
+# Colocar 'R' (robots) en el laberinto
+place_elements('R', NUM_ROBOTS)
+
+# Llenar el laberinto con 'B' (bloques) donde no haya otros elementos
+for i in range(1, n - 1):
+    for j in range(1, m - 1):
+        if maze[i][j] == ' ':
+            maze[i][j] = 'B'
 
 def agent_set(player):
     x, y = player.get_pos()
@@ -56,9 +103,13 @@ def agent_set(player):
 
 def agent_update(player):
     player.check_action()
-    x, y = player.get_pos()
-    maze[x][y]='B'
-    x, y = player.get_pos()
+    if player.ship_sensor():
+        player.deliver()
+        x, y = player.get_pos()
+        maze[x][y] = 'A'
+        print(x,y)
+        return
+    x,y = player.get_pos()
     maze[x][y] = 'A'
 
 
