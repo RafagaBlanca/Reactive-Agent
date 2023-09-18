@@ -1,4 +1,5 @@
 from tilemap import *
+from tilemap import NUM_ROBOTS
 import pygame
 import random
 
@@ -14,9 +15,13 @@ class Agent(pygame.sprite.Sprite):
         self.ship_x = 0
         self.ship_y= 0
         self.in_ship = False
+        self.obj = 10
 
     def get_pos(self):
         return self.row, self.col 
+    
+    def getobj(self):
+        return self.obj
     
     def set_ship(self, x ,y):
         self.ship_x = x
@@ -38,7 +43,7 @@ class Agent(pygame.sprite.Sprite):
         return maze[self.row][self.col] == 'R'
 
     def move_sensors(self):
-        possible_moves = []
+        possible_moves = [] # U D
 
         if self.north_sensor():
             possible_moves.append('U')
@@ -56,7 +61,6 @@ class Agent(pygame.sprite.Sprite):
         possible_moves = []
 
         if self.col < self.ship_x:
-            #TODO al momento de hacer retreat se come hasta los obstaculos asi que es mejor llamar al sensor
             if self.east_sensor():
                 possible_moves.append('R')
         elif self.col > self.ship_x:
@@ -69,12 +73,15 @@ class Agent(pygame.sprite.Sprite):
         elif self.row > self.ship_y:
             if self.north_sensor():
                 possible_moves.append('U')
+        
+        if len(possible_moves) == 0:
+            possible_moves = self.move_sensors()
 
         self.move(random.choice(possible_moves))
 
 
     def deliver(self):
-        
+        self.obj-=self.samples
         self.samples = 0
         self.move(self.move_sensors())
         print("entregado")

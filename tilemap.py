@@ -114,7 +114,9 @@ def agent_update(player):
 
 
 def draw(screen, player):
-    agent_update(player)
+    x = player.getobj()
+    if x > 0:
+        agent_update(player)
     for row in range(len(maze)):
         for column in range(len(maze[row])):
             x = column * TILE_SIZE
