@@ -9,12 +9,12 @@ HEIGHT = TILE_SIZE * 5
 
 # texture of colors
 YELLOW  = (255, 255, 0)
-RED     = (255, 0, 0)
-BLUE    = (0 , 0, 255)
-GREEN   = (0, 255, 0)
-BROWN   = (160, 82, 45)
+RED     = (203, 66, 159)
+BLUE    = (191 , 33, 30)
+GREEN   = (123, 224, 173)
+BROWN   = (255, 237, 225)
 PURPLE  = (125, 2, 247)
-BLACK   = (0,0,0)
+BLACK   = (33,26,29)
 
 
 
@@ -23,8 +23,6 @@ def create_texture(color):
     image.fill(color)
     return image
 
-# 0x0 -> grass
-# 0xb -> dirt
 textures = {
     'G' : create_texture(GREEN),
     'B' : create_texture(BROWN),
@@ -53,16 +51,16 @@ tiles = ['G', 'B', 'Y','A', 'P','R', 'Z']
 n = 10
 m = 20
 
-# Crear un laberinto vacío lleno de espacios ' '
+# Crear un mapa vacío lleno de espacios ' '
 maze = [[' ' for _ in range(m)] for _ in range(n)]
 
-# Definir constantes
+
 NUM_GOALS = 10
 NUM_ROBOTS = 10
 
 random_row = random.randint(1, n - 2)
 random_column = random.randint(1, m - 2)
-# Colocar al jugador 'P' en una posición específica
+# Colocar al agente 'P' en una posición específica
 maze[random_row][random_column] = 'P'
 
 
@@ -75,7 +73,8 @@ for i in range(n):
 for j in range(m):
     maze[0][j] = 'Z'
     maze[n-1][j] = 'Z'
-# Función para colocar elementos aleatorios en el laberinto
+
+
 def place_elements(element, num_elements):
     count = 0
     while count < num_elements:
@@ -85,10 +84,10 @@ def place_elements(element, num_elements):
             maze[random_row][random_column] = element
             count += 1
 
-# Colocar 'G' (metas) en el laberinto
+
 place_elements('G', NUM_GOALS)
 
-# Colocar 'R' (robots) en el laberinto
+
 place_elements('R', NUM_ROBOTS)
 
 # Llenar el laberinto con 'B' (bloques) donde no haya otros elementos

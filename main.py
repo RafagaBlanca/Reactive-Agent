@@ -10,7 +10,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # create a surface represent our window
-screen = pygame.display.set_mode((1280, 960))
+screen = pygame.display.set_mode((1280, 640))
 # agent creation
 random_row = random.randint(1, n - 2)
 random_col = random.randint(1, m - 2)
